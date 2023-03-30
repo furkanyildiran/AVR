@@ -1,6 +1,9 @@
 #include "stepper.h"
 
+
+
 static volatile uint8_t direction = 0;
+
 
 ISR(TIMER0_COMPA_vect){
 	switch(direction){
@@ -25,12 +28,14 @@ ISR(TIMER0_COMPA_vect){
 }
 
 void A4988_init(void){
-	R_SET_PINS_OUTPUT();
-	L_SET_PINS_OUTPUT();
+	GPIO_SET_REG(R_A4988_DDR, R_DDR_VAL);
+	GPIO_SET_REG(L_A4988_DDR, L_DDR_VAL);
+	/*R_SET_PINS_OUTPUT();
+	L_SET_PINS_OUTPUT();*/
 	TCCR0A = TIMER0_CTC_MODE;
 	TCCR0B = TIMER0_PRESCALER_64;
 	TIMSK0 |= TIMER0_INT_ENBL;
-	A4988_SPEED_LEVEL3();
+	A4988_SPEED_LEVEL5();
 }
 void A4988_stop(void){
 	CHIP_SLEEP();
